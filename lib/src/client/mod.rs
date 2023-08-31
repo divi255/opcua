@@ -96,6 +96,7 @@
 
 use crate::core::supported_message::SupportedMessage;
 use crate::types::{response_header::ResponseHeader, status_code::StatusCode};
+use std::sync::atomic::{AtomicBool, Ordering};
 
 mod comms;
 mod message_queue;
@@ -109,6 +110,18 @@ mod client;
 mod config;
 mod session;
 mod session_retry_policy;
+
+static TRUST_ANY_SERVER_CERT: AtomicBool = AtomicBool::new(false);
+
+#[inline]
+pub(crate) fn trust_any_server_cert() -> bool {
+    TRUST_ANY_SERVER_CERT.load(Ordering::Relaxed)
+}
+
+#[inline]
+pub fn set_trust_any_server_cert(mode: bool) {
+    TRUST_ANY_SERVER_CERT.store(mode, Ordering::Relaxed);
+}
 
 /// Process the service result, i.e. where the request "succeeded" but the response
 /// contains a failure status code.

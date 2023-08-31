@@ -36,6 +36,7 @@ use crate::{
         session_retry_policy::{Answer, SessionRetryPolicy},
         subscription::{self, Subscription},
         subscription_state::SubscriptionState,
+        trust_any_server_cert,
     },
     core::{
         comms::{
@@ -1420,7 +1421,7 @@ impl SessionService for Session {
                 StatusCode::Good
             };
 
-            if !cert_status_code.is_good() {
+            if !cert_status_code.is_good() && !trust_any_server_cert() {
                 session_error!(self, "Server's certificate was rejected");
                 Err(cert_status_code)
             } else {
