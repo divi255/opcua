@@ -818,9 +818,10 @@ impl BinaryEncoder<ApplicationType> for ApplicationType {
     }
 }
 
-#[derive(Debug, Copy, Clone, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq, Serialize, Deserialize, Default)]
 pub enum MessageSecurityMode {
     Invalid = 0,
+    #[default]
     None = 1,
     Sign = 2,
     SignAndEncrypt = 3,
